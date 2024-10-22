@@ -32,3 +32,9 @@ curl -X POST http://localhost:3000/auth/signin \
 curl -X GET http://localhost:3000/auth/protected \
   -H "Authorization: Bearer eyJraWQiOiJ..."
 ```
+
+### ログアウト
+```
+curl -X POST http://localhost:3000/auth/logout \  
+  -H "Authorization: Bearer eyJraWQiOiJ..."
+```
