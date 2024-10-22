@@ -63,3 +63,23 @@ export const signIn = async (req: Request, res: Response) => {
     res.status(400).json({ message: 'サインインに失敗しました', error });
   }
 };
+
+export const logout = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(' ')[1];
+
+  if (!token) {
+    res.status(401).json({ message: 'トークンが提供されていません' });
+    return;
+  }
+
+  const params = {
+    AccessToken: token,
+  };
+
+  try {
+    await cognito.globalSignOut(params).promise();
+    res.status(200).json({ message: 'ログアウトが成功しました' });
+  } catch (error) {
+    res.status(400).json({ message: 'ログアウトに失敗しました', error });
+  }
+};
