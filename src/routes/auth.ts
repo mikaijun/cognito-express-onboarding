@@ -1,14 +1,14 @@
 import express from 'express';
+import { Response } from 'express';
 import { signUp, confirmSignUp, signIn } from '../controllers/authController';
-import { verifyToken } from '../middleware/authMiddleware';
+import { AuthenticatedRequest, verifyToken } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
 router.post('/signup', signUp);
 router.post('/confirm-signup', confirmSignUp);
 router.post('/signin', signIn);
-router.get('/protected', verifyToken, (req, res) => {
-  // @ts-ignore
+router.get('/protected', verifyToken, (req: AuthenticatedRequest, res: Response) => {
   res.status(200).json({ message: '保護されたルートにアクセスできました', user: req.user });
 });
 
