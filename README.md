@@ -1,3 +1,8 @@
+# この記事に関して
+下記記事のサンプルリポジトリです
+
+https://qiita.com/miumi/items/abeddf825378789f4b2e
+
 # 環境構築
 ```
 npm install
