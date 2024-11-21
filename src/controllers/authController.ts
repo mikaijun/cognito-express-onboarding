@@ -1,8 +1,17 @@
 import AWS from 'aws-sdk';
+import crypto from 'crypto';
 import { Request, Response } from 'express';
 
 const cognito = new AWS.CognitoIdentityServiceProvider();
 const clientId = process.env.COGNITO_CLIENT_ID as string;
+const clientSecret = process.env.COGNITO_CLIENT_SECRET as string;
+
+const generateSecretHash = (username: string): string => {
+  return crypto
+    .createHmac('SHA256', clientSecret)
+    .update(username + clientId)
+    .digest('base64');
+};
 
 export const signUp = async (req: Request, res: Response) => {
   const { username, password, email } = req.body;
@@ -17,6 +26,7 @@ export const signUp = async (req: Request, res: Response) => {
         Value: email,
       },
     ],
+    SecretHash: generateSecretHash(username),
   };
 
   try {
@@ -34,6 +44,7 @@ export const confirmSignUp = async (req: Request, res: Response) => {
     ClientId: clientId,
     Username: username,
     ConfirmationCode: code,
+    SecretHash: generateSecretHash(username),
   };
 
   try {
@@ -53,6 +64,7 @@ export const signIn = async (req: Request, res: Response) => {
     AuthParameters: {
       USERNAME: username,
       PASSWORD: password,
+      SECRET_HASH: generateSecretHash(username),
     },
   };
 
